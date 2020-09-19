@@ -7,6 +7,10 @@ export const knexConfig: Knex.Config = {
 		filename: resolve(__dirname, 'database.sqlite'),
 	},
 	useNullAsDefault: true,
+	migrations: {
+		extension: 'ts',
+		directory: './src/database/migrations',
+	},
 }
 
 export const knex: Knex = setupKnex(knexConfig)
