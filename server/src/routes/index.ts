@@ -1,7 +1,10 @@
 import { Router } from 'express'
+import { knex } from '../database/connection'
 
 export const appRoutes = Router()
 
-appRoutes.get('/', (request, response) => {
-	return response.json({ message: 'Server running' })
+appRoutes.get('/', async (request, response) => {
+	const te = await knex('sqlite_schema').select('*')
+
+	return response.json(te)
 })
