@@ -11,6 +11,9 @@ export const knexConfig: Knex.Config = {
 		extension: 'ts',
 		directory: './src/database/migrations',
 	},
+	seeds: {
+		directory: './src/database/seeds',
+	},
 }
 
 export const knex: Knex = setupKnex(knexConfig)
