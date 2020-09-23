@@ -3,8 +3,15 @@ import { knex } from '../database/connection'
 
 export const appRoutes = Router()
 
-appRoutes.get('/', async (request, response) => {
-	const te = await knex('sqlite_schema').select('*')
+appRoutes.get('/items', async (request, response) => {
+	const items = await knex('items').select('*')
 
-	return response.json(te)
+	const serializedItems = items.map((items) => {
+		return {
+			title: items.title,
+			image_url: `http://localhost:3333/uploads/${items.image}`,
+		}
+	})
+
+	return response.json(serializedItems)
 })
