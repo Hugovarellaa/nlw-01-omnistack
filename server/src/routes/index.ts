@@ -16,3 +16,21 @@ appRoutes.get('/items', async (request, response) => {
 
 	return response.json(serializedItems)
 })
+
+appRoutes.post('/points', async (request, response) => {
+	const { name, email, whatsapp, latitude, longitude, city, uf, items } =
+		request.body
+
+	await knex('points').insert({
+		image: 'faker',
+		name,
+		email,
+		whatsapp,
+		latitude,
+		longitude,
+		city,
+		uf,
+	})
+
+	return response.status(201).json({ message: 'Success' })
+})
