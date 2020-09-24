@@ -8,6 +8,7 @@ appRoutes.get('/items', async (request, response) => {
 
 	const serializedItems = items.map((items) => {
 		return {
+			id: items.id,
 			title: items.title,
 			image_url: `http://localhost:3333/uploads/${items.image}`,
 		}
