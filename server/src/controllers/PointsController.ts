@@ -2,7 +2,20 @@ import { Request, Response } from 'express'
 import { knex } from '../database/connection'
 
 export class PointsController {
-	async handler(request: Request, response: Response) {
+	async show(request: Request, response: Response) {
+		const { id } = request.params
+
+		const point = await knex('points').where({ id }).first()
+		console.log(point)
+
+		if (!point) {
+			return response.status(400).json({ message: 'Point not found!' })
+		}
+
+		return response.json(point)
+	}
+
+	async create(request: Request, response: Response) {
 		const { name, email, whatsapp, latitude, longitude, city, uf, items } =
 			request.body
 
