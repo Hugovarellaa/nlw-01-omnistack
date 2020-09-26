@@ -1,8 +1,10 @@
 import express from 'express'
 import { resolve } from 'node:path'
+import { appRoutes } from './routes'
 
 const app = express()
 app.use(express.json())
+app.use(appRoutes)
 
 app.use('/uploads', express.static(resolve(__dirname, '..', 'uploads')))
 
