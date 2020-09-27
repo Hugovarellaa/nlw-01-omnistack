@@ -9,7 +9,12 @@
 [] - Deve ser possível buscar um ponto de coleta
 [] - Deve ser possível Listar todos os itens que são coletados
 
-
 #### Regras de Negócios(RN)
 
 ##### Regras Não Funcionais(RNF)
+
+## Tabelas
+
+- Points (Pontos de coletas)
+- Items (Itens de coletas)
+- Tabela pivot (Relacionamento de tabelas muitos para muitos)
