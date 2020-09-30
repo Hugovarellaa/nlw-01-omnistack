@@ -18,3 +18,10 @@
 - Points (Pontos de coletas)
 - Items (Itens de coletas)
 - Tabela pivot (Relacionamento de tabelas muitos para muitos)
+
+#### Rotas
+
+Cadastro de pontos de coletas
+lista os items de coletas
+listar pontos -> por estado, cidade , items
+lista ponto de coleta especifico
