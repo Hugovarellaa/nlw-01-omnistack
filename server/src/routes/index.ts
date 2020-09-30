@@ -4,7 +4,7 @@ import { knex } from '../database'
 export const appRoutes = Router()
 
 appRoutes.get('/', async (req, res) => {
-	const te = await knex('sqlite_schema').select()
+	const te = await knex('').select()
 
 	return res.json(te)
 })
