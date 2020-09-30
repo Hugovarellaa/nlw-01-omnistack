@@ -3,7 +3,7 @@ import { Knex } from 'knex'
 
 declare module 'knex/types/tables' {
 	export interface Tables {
-		items: {
+		points: {
 			id: string
 			name: string
 			email: number
@@ -13,7 +13,7 @@ declare module 'knex/types/tables' {
 			city: string
 			uf: string
 		}
-		points: {
+		items: {
 			id: string
 			image: string
 			name: string
