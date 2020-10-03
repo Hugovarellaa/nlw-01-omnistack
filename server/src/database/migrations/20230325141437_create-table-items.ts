@@ -3,13 +3,8 @@ import { Knex } from 'knex'
 export async function up(knex: Knex): Promise<void> {
 	await knex.schema.createTable('items', (table) => {
 		table.increments('id').primary().notNullable()
-		table.string('name').notNullable()
-		table.string('email').notNullable()
-		table.string('whatsapp').notNullable()
-		table.decimal('latitude').notNullable()
-		table.decimal('longitude').notNullable()
-		table.string('city').notNullable()
-		table.string('uf').notNullable()
+		table.string('image').notNullable()
+		table.string('title').notNullable()
 	})
 }
 
