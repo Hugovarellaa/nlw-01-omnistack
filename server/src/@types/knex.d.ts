@@ -5,6 +5,7 @@ declare module 'knex/types/tables' {
 	export interface Tables {
 		points: {
 			id: string
+			image: string
 			name: string
 			email: number
 			whatsapp: string
