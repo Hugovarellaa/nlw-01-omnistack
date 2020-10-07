@@ -3,10 +3,17 @@ import { knex } from '../database'
 
 export const appRoutes = Router()
 
-appRoutes.get('/', async (req, res) => {
-	const te = await knex('').select()
+appRoutes.get('/items', async (req, res) => {
+	const items = await knex('items').select()
 
-	return res.json(te)
+	const serializedItems = items.map((item) => {
+		return {
+			name: item.name,
+			image_url: `http://localhost:3333/uploads/${item.image}`,
+		}
+	})
+
+	return res.json(serializedItems)
 })
 
 appRoutes.post('/', (req, res) => {})
