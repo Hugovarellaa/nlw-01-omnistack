@@ -21,7 +21,7 @@
 
 #### Rotas
 
-[] Cadastro de pontos de coletas
+[x] Cadastro de pontos de coletas
 [x] lista os items de coletas
 [] listar pontos -> por estado, cidade , items
 [] lista ponto de coleta especifico
