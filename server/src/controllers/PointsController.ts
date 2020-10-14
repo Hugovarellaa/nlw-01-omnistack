@@ -8,7 +8,7 @@ export class PointsController {
 
 		// const trx = knex.transaction() => Verificar como realizar e substituir aonde precisar
 
-		const insertedIds = await knex('points').insert({
+		const point = {
 			image: 'fake',
 			name,
 			email,
@@ -17,7 +17,9 @@ export class PointsController {
 			longitude,
 			city,
 			uf,
-		})
+		}
+
+		const insertedIds = await knex('points').insert(point)
 
 		const point_id = insertedIds[0]
 
@@ -30,6 +32,9 @@ export class PointsController {
 
 		await knex('points_items').insert(pointItems)
 
-		return response.status(201).json({ ok: true })
+		return response.status(201).json({
+			id: point_id,
+			...point,
+		})
 	}
 }
