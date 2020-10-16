@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { knex } from '../database'
 
 export class PointsController {
+	// Deve ser possível cria um ponto de coleta
 	async create(request: Request, response: Response) {
 		const { name, email, whatsapp, latitude, longitude, city, uf, items } =
 			request.body
@@ -36,5 +37,18 @@ export class PointsController {
 			id: point_id,
 			...point,
 		})
+	}
+
+	// Deve ser possível Buscar um ponto especifico de coleta
+	// Se nao existir o ponto retorna um erro
+	async show(request: Request, response: Response) {
+		const { id } = request.params
+
+		const point = await knex('points').where({ id }).first()
+		if (!point) {
+			return response.status(400).json({ message: 'Point not found!' })
+		}
+
+		return response.status(200).json(point)
 	}
 }
