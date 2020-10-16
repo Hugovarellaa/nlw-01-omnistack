@@ -1,22 +1,10 @@
 import { Router } from 'express'
+import { ItemsController } from '../controllers/ItemsController'
 import { PointsController } from '../controllers/PointsController'
-import { knex } from '../database'
 
 export const appRoutes = Router()
 const pointsController = new PointsController()
+const itemsController = new ItemsController()
 
-appRoutes.get('/items', async (req, res) => {
-	const items = await knex('items').select()
-
-	const serializedItems = items.map((item) => {
-		return {
-			id: item.id,
-			name: item.name,
-			image_url: `http://localhost:3333/uploads/${item.image}`,
-		}
-	})
-
-	return res.json(serializedItems)
-})
-
+appRoutes.get('/items', itemsController.index)
 appRoutes.post('/points', pointsController.create)
