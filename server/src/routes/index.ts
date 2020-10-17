@@ -8,5 +8,6 @@ const itemsController = new ItemsController()
 
 appRoutes.get('/items', itemsController.index)
 
+appRoutes.get('/points', pointsController.index)
 appRoutes.get('/points/:id', pointsController.show)
 appRoutes.post('/points', pointsController.create)
