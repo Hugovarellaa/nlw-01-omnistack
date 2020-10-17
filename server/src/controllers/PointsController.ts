@@ -7,7 +7,8 @@ export class PointsController {
 		const { name, email, whatsapp, latitude, longitude, city, uf, items } =
 			request.body
 
-		// const trx = knex.transaction() => Verificar como realizar e substituir aonde precisar
+		const trx = await knex.transaction()
+		// => Verificar como realizar e substituir aonde precisar
 
 		const point = {
 			image: 'fake',
@@ -20,7 +21,7 @@ export class PointsController {
 			uf,
 		}
 
-		const insertedIds = await knex('points').insert(point)
+		const insertedIds = await trx('points').insert(point)
 
 		const point_id = insertedIds[0]
 
@@ -31,7 +32,9 @@ export class PointsController {
 			}
 		})
 
-		await knex('points_items').insert(pointItems)
+		await trx('points_items').insert(pointItems)
+
+		await trx.commit()
 
 		return response.status(201).json({
 			id: point_id,
@@ -58,5 +61,27 @@ export class PointsController {
 			point,
 			items,
 		})
+	}
+
+	// Deve ser possível litar vários pontos de coletas
+	// Deve ser possível filtrar por items
+	// Deve ser possível filtrar por cidade
+	// Deve ser possível filtrar por uf
+	async index(request: Request, response: Response) {
+		const { items, city, uf } = request.query
+
+		const parsedItems = String(items)
+			.split(',')
+			.map((item) => Number(item.trim()))
+
+		const point = await knex('points')
+			.join('points_items', 'points.id', '=', 'points_items.point_id')
+			.whereIn('points_items.item_id', parsedItems)
+			.where('city', String(city))
+			.where('uf', String(uf))
+			.distinct()
+			.select('points.*')
+
+		return response.status(200).json(point)
 	}
 }
