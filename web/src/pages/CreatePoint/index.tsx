@@ -71,6 +71,55 @@ export function CreatePoint() {
             <h2>Ítens de coleta</h2>
             <span>Selecione um ou mais ítens abaixo</span>
           </legend>
+
+          <ul className="items-grid">
+            <li>
+              <img
+                src="http://localhost:3333/uploads/lampadas.svg"
+                alt="test"
+              />
+              <span>Lampada</span>
+            </li>
+            <li className="selected">
+              <img
+                src="http://localhost:3333/uploads/lampadas.svg"
+                alt="test"
+              />
+              <span>Lampada</span>
+            </li>
+
+            <li>
+              <img
+                src="http://localhost:3333/uploads/lampadas.svg"
+                alt="test"
+              />
+              <span>Lampada</span>
+            </li>
+
+            <li>
+              <img
+                src="http://localhost:3333/uploads/lampadas.svg"
+                alt="test"
+              />
+              <span>Lampada</span>
+            </li>
+
+            <li>
+              <img
+                src="http://localhost:3333/uploads/lampadas.svg"
+                alt="test"
+              />
+              <span>Lampada</span>
+            </li>
+
+            <li>
+              <img
+                src="http://localhost:3333/uploads/lampadas.svg"
+                alt="test"
+              />
+              <span>Lampada</span>
+            </li>
+          </ul>
         </fieldset>
       </form>
     </div>
