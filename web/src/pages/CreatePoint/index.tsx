@@ -1,12 +1,29 @@
+import { useEffect, useState } from 'react'
 import { FiArrowLeft } from 'react-icons/fi'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import { Link } from 'react-router-dom'
 import logoImg from '../../assets/logo.svg'
+import { api } from '../../services/api'
 import './CreatePoint.css'
 
-// const position = [-15.4559642, -47.6750848]
+interface Items {
+  id: string
+  name: string
+  image_url: string
+}
 
 export function CreatePoint() {
+  const [items, setItems] = useState<Items[]>([])
+
+  async function getApiItems() {
+    const response = await api.get('/items')
+    setItems(response.data)
+  }
+
+  useEffect(() => {
+    getApiItems()
+  }, [])
+
   return (
     <div id="page-create-point">
       <header>
@@ -86,52 +103,12 @@ export function CreatePoint() {
           </legend>
 
           <ul className="items-grid">
-            <li>
-              <img
-                src="http://localhost:3333/uploads/lampadas.svg"
-                alt="test"
-              />
-              <span>Lampada</span>
-            </li>
-            <li className="selected">
-              <img
-                src="http://localhost:3333/uploads/lampadas.svg"
-                alt="test"
-              />
-              <span>Lampada</span>
-            </li>
-
-            <li>
-              <img
-                src="http://localhost:3333/uploads/lampadas.svg"
-                alt="test"
-              />
-              <span>Lampada</span>
-            </li>
-
-            <li>
-              <img
-                src="http://localhost:3333/uploads/lampadas.svg"
-                alt="test"
-              />
-              <span>Lampada</span>
-            </li>
-
-            <li>
-              <img
-                src="http://localhost:3333/uploads/lampadas.svg"
-                alt="test"
-              />
-              <span>Lampada</span>
-            </li>
-
-            <li>
-              <img
-                src="http://localhost:3333/uploads/lampadas.svg"
-                alt="test"
-              />
-              <span>Lampada</span>
-            </li>
+            {items.map((item) => (
+              <li className="" key={item.id}>
+                <img src={item.image_url} alt={item.name} />
+                <span>{item.name}</span>
+              </li>
+            ))}
           </ul>
         </fieldset>
         <button type="submit">Cadastrar ponto de coleta</button>
