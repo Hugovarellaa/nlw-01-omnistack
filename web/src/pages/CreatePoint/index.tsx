@@ -1,8 +1,9 @@
 import axios from 'axios'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { LeafletMouseEvent } from 'leaflet'
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { FiArrowLeft } from 'react-icons/fi'
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
-import { Link } from 'react-router-dom'
+import { Map, Marker, Popup, TileLayer } from 'react-leaflet'
+import { Link, useNavigate } from 'react-router-dom'
 import logoImg from '../../assets/logo.svg'
 import { api } from '../../services/api'
 import './CreatePoint.css'
@@ -27,6 +28,20 @@ export function CreatePoint() {
   const [cities, setCities] = useState<string[]>([])
   const [selectedUF, setSelectedUF] = useState('0')
   const [selectedCities, setSelectedCities] = useState('0')
+  const [selectedItems, setSelectedItems] = useState<string[]>([])
+  const [initialPosition, setInitialPosition] = useState<[number, number]>([
+    0, 0,
+  ])
+  const [selectedPosition, setSelectedPosition] = useState<[number, number]>([
+    0, 0,
+  ])
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    whatsapp: '',
+  })
+
+  const navigate = useNavigate()
 
   async function getApiItems() {
     const response = await api.get('/items')
@@ -42,10 +57,60 @@ export function CreatePoint() {
     setSelectedCities(cities)
   }
 
+  function handleMapClick(event: LeafletMouseEvent) {
+    setSelectedPosition([event.latlng.lat, event.latlng.lng])
+  }
+
+  function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
+    const { name, value } = event.target
+
+    setFormData({
+      ...formData,
+      [name]: value,
+    })
+  }
+
+  function handleSelectItem(id: string) {
+    const alreadySelected = selectedItems.findIndex((item) => item === id)
+    if (alreadySelected >= 0) {
+      const filteredItems = selectedItems.filter((item) => item !== id)
+      setSelectedItems(filteredItems)
+    } else {
+      setSelectedItems([...selectedItems, id])
+    }
+  }
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+
+    const { name, email, whatsapp } = formData
+    const uf = selectedUF
+    const city = selectedCities
+    const [latitude, longitude] = selectedPosition
+    const items = selectedItems
+
+    const data = {
+      name,
+      email,
+      whatsapp,
+      uf,
+      city,
+      latitude,
+      longitude,
+      items,
+    }
+
+    await api.post('/points', data)
+    alert('Ponto de coleta criado!!')
+    navigate('/')
+  }
+
+  // Buscar os itens da grid no Back-end
   useEffect(() => {
     getApiItems()
   }, [])
 
+  // Buscar os estados na API IBGE
   useEffect(() => {
     axios
       .get<IBGEUFResponse[]>(
@@ -57,6 +122,7 @@ export function CreatePoint() {
       })
   }, [])
 
+  // Cria as cidades quando o estado for preenchido
   useEffect(() => {
     if (selectedUF === '0') {
       return
@@ -71,6 +137,14 @@ export function CreatePoint() {
       })
   }, [selectedUF])
 
+  // Pega a localização atual pela geolocalização
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      const { latitude, longitude } = position.coords
+      setInitialPosition([latitude, longitude])
+    })
+  }, [])
+
   return (
     <div id="page-create-point">
       <header>
@@ -81,7 +155,7 @@ export function CreatePoint() {
         </Link>
       </header>
 
-      <form>
+      <form onSubmit={handleSubmit}>
         <h1>
           Cadastro do
           <br /> ponto de coleta
@@ -94,18 +168,33 @@ export function CreatePoint() {
 
           <div className="field">
             <label htmlFor="name">Nome da entidade</label>
-            <input type="text" name="name" id="name" />
+            <input
+              type="text"
+              name="name"
+              id="name"
+              onChange={handleInputChange}
+            />
           </div>
 
           <div className="field-group">
             <div className="field">
               <label htmlFor="email">E-mail</label>
-              <input type="email" name="email" id="email" />
+              <input
+                type="email"
+                name="email"
+                id="email"
+                onChange={handleInputChange}
+              />
             </div>
 
             <div className="field">
-              <label htmlFor="whatspp">WhatsApp</label>
-              <input type="text" name="whatspp" id="whatspp" />
+              <label htmlFor="whatsapp">WhatsApp</label>
+              <input
+                type="text"
+                name="whatsapp"
+                id="whatsapp"
+                onChange={handleInputChange}
+              />
             </div>
           </div>
         </fieldset>
@@ -116,15 +205,15 @@ export function CreatePoint() {
             <span>Selecione o endereço no mapa</span>
           </legend>
 
-          <MapContainer center={[-15.461349, -47.6148904]} zoom={13}>
+          <Map center={initialPosition} zoom={13} onClick={handleMapClick}>
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            <Marker position={[-15.461349, -47.6148904]}>
+            <Marker position={selectedPosition}>
               <Popup>Map</Popup>
             </Marker>
-          </MapContainer>
+          </Map>
 
           <div className="field-group">
             <div className="field">
@@ -172,7 +261,11 @@ export function CreatePoint() {
 
           <ul className="items-grid">
             {items.map((item) => (
-              <li className="" key={item.id}>
+              <li
+                className={selectedItems.includes(item.id) ? 'selected' : ''}
+                key={item.id}
+                onClick={() => handleSelectItem(item.id)}
+              >
                 <img src={item.image_url} alt={item.name} />
                 <span>{item.name}</span>
               </li>
