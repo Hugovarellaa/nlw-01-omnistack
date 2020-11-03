@@ -1,9 +1,10 @@
 import { Router } from 'express'
+import { knex } from '../database'
 
 export const routes = Router()
 
-routes.get('/', (req, res) => {
-	const user = ['Hugo', 'Google', 'Fulano']
+routes.get('/', async (req, res) => {
+	const test = await knex('sqlite_schema').select('*')
 
-	return res.json(user)
+	return res.json(test)
 })
