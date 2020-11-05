@@ -7,12 +7,12 @@ export const knexConfig: Knex.Config = {
 		// filename: ./src/database/app.db,
 		filename: resolve(__dirname, 'app.db'),
 	},
-	useNullAsDefault: true,
 	migrations: {
 		extension: 'ts',
 		// directory: ./src/database/migrations,
 		directory: resolve(__dirname, 'migrations'),
 	},
+	useNullAsDefault: true,
 }
 
 export const knex: Knex = setupKnex(knexConfig)
