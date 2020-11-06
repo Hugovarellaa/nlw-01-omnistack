@@ -12,6 +12,11 @@ export const knexConfig: Knex.Config = {
 		// directory: ./src/database/migrations,
 		directory: resolve(__dirname, 'migrations'),
 	},
+	seeds: {
+		extension: 'ts',
+		// directory: ./src/database/seeds,
+		directory: resolve(__dirname, 'seeds'),
+	},
 	useNullAsDefault: true,
 }
 
