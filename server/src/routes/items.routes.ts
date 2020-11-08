@@ -1,18 +1,8 @@
 import { Router } from 'express'
-import { knex } from '../database'
+import { ItensController } from '../controllers/ItemsController'
 
 export const itemsRoutes = Router()
 
-itemsRoutes.get('/items', async (request, response) => {
-	const items = await knex('items').select('*')
+const itensController = new ItensController()
 
-	const serializedItems = items.map((item) => {
-		return {
-			id: item.id,
-			name: item.name,
-			image_url: `http://localhost:3333/uploads/${item.image}`,
-		}
-	})
-
-	return response.json(serializedItems)
-})
+itemsRoutes.get('/items', itensController.show)
