@@ -5,4 +5,10 @@ export const itemsRoutes = Router()
 
 const itensController = new ItensController()
 
-itemsRoutes.get('/items', itensController.show)
+itemsRoutes.get('/items', itensController.index)
+
+// index -> list all
+// show -> list specific items
+// create -> create a new item
+// update -> update
+// delete -> delete
