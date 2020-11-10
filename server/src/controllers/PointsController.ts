@@ -46,4 +46,19 @@ export class PointsController {
 
 		return response.status(201).json(points)
 	}
+
+	async show(request: Request, response: Response): Promise<Response> {
+		const paramsSchema = z.object({
+			id: z.string(),
+		})
+
+		const { id } = paramsSchema.parse(request.params)
+
+		const point = await knex('points').where('id', id).first()
+		if (!point) {
+			return response.status(404).json({ error: 'points not found' })
+		}
+
+		return response.json(point)
+	}
 }
