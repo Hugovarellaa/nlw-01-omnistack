@@ -5,6 +5,7 @@ export const pointsRoutes = Router()
 
 const pointsController = new PointsController()
 
+pointsRoutes.get('/points/', pointsController.index)
 pointsRoutes.post('/points', pointsController.create)
 pointsRoutes.get('/points/:id', pointsController.show)
 

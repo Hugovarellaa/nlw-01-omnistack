@@ -71,4 +71,26 @@ export class PointsController {
 
 		return response.json({ point, items })
 	}
+
+	async index(request: Request, response: Response): Promise<Response> {
+		const queryParamsSchema = z.object({
+			city: z.string(),
+			uf: z.string(),
+			items: z.string(),
+		})
+
+		const { city, items, uf } = queryParamsSchema.parse(request.query)
+
+		const parsedItems = items.split(',').map((item) => Number(item.trim()))
+
+		const points = await knex('points')
+			.join('point_items', 'points.id', '=', 'point_items.point_id')
+			.whereIn('point_items.item_id', parsedItems)
+			.where('city', city)
+			.where('uf', uf)
+			.distinct()
+			.select('points.*')
+
+		return response.json(points)
+	}
 }
