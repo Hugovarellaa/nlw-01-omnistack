@@ -18,9 +18,9 @@ export class PointsController {
 		const { name, email, city, uf, whatsapp, latitude, longitude, items } =
 			createBodySchema.parse(request.body)
 
-		// const trx = await knex.transaction()
+		const trx = await knex.transaction()
 
-		const points = await knex('points')
+		const points = await trx('points')
 			.insert({
 				image: 'image faker',
 				name,
@@ -42,7 +42,9 @@ export class PointsController {
 			}
 		})
 
-		await knex('point_items').insert(pointItems)
+		await trx('point_items').insert(pointItems)
+
+		await trx.commit()
 
 		return response.status(201).json(points)
 	}
