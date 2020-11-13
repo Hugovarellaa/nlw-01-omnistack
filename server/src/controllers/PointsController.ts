@@ -22,7 +22,8 @@ export class PointsController {
 
 		const points = await trx('points')
 			.insert({
-				image: 'image faker',
+				image:
+					'https://plus.unsplash.com/premium_photo-1679728130451-ebba4dc5307d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=60',
 				name,
 				email,
 				whatsapp,
