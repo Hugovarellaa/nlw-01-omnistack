@@ -1,12 +1,11 @@
-import { Header } from './components/Header'
+import { Home } from './pages/Home'
 import './styles/App.css'
 
 export function App() {
   return (
     <>
       <div>
-        <Header />
-        <h1>Ola mundo</h1>
+        <Home />
       </div>
     </>
   )
