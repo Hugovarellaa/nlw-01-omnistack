@@ -1,7 +1,9 @@
+import logoSvg from '../assets/logo.svg'
+
 export function Header() {
   return (
     <header>
-      <h1>header</h1>
+      <img src={logoSvg} alt="Logo Ecoleta" />
     </header>
   )
 }
