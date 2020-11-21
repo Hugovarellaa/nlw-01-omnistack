@@ -1,12 +1,10 @@
-import { Home } from './pages/Home'
+import { Route } from './router'
 import './styles/App.css'
 
 export function App() {
   return (
     <>
-      <div>
-        <Home />
-      </div>
+      <Route />
     </>
   )
 }

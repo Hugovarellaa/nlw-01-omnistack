@@ -1,4 +1,5 @@
 import { FiLogIn } from 'react-icons/fi'
+import { Link } from 'react-router-dom'
 import { Header } from '../../components/Header'
 import './Home.css'
 
@@ -16,12 +17,12 @@ export function Home() {
               eficiente.
             </p>
 
-            <a href="#">
+            <Link to="/create-point">
               <span>
                 <FiLogIn />
               </span>
               <strong>Cadastre um ponto de coleta</strong>
-            </a>
+            </Link>
           </main>
         </div>
       </div>
