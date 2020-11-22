@@ -1,9 +1,12 @@
 import { FiArrowLeft } from 'react-icons/fi'
+import { MapContainer, Marker, TileLayer } from 'react-leaflet'
 import { Link } from 'react-router-dom'
 import { Header } from '../../components/Header'
 import './CreatePoint.css'
 
 export function CreatePoint() {
+  const position = [-15.4568511, -47.6065576]
+
   return (
     <div id="page-create-point">
       <header>
@@ -48,6 +51,13 @@ export function CreatePoint() {
             <span>Selecione o endereço no mapa</span>
           </legend>
 
+          {/* Maps */}
+          <MapContainer center={position} zoom={13}>
+            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+            <Marker position={position}></Marker>
+          </MapContainer>
+
+          {/* Formulário do estado e cidade */}
           <div className="field-group">
             <div className="field">
               <label htmlFor="uf">Estado (UF)</label>
@@ -65,6 +75,7 @@ export function CreatePoint() {
           </div>
         </fieldset>
 
+        {/* Itens de coleta */}
         <fieldset>
           <legend>
             <h2>Ítens de coleta</h2>
