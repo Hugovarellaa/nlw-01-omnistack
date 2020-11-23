@@ -1,11 +1,31 @@
+import { useEffect, useState } from 'react'
 import { FiArrowLeft } from 'react-icons/fi'
 import { MapContainer, Marker, TileLayer } from 'react-leaflet'
 import { Link } from 'react-router-dom'
 import { Header } from '../../components/Header'
+import { api } from '../../libs/axios'
 import './CreatePoint.css'
 
+interface Items {
+  id: number
+  name: string
+  image_url: string
+}
+
 export function CreatePoint() {
+  const [items, setItems] = useState<Items[]>([])
   const position = [-15.4568511, -47.6065576]
+
+  async function loadItemsInApi() {
+    const response = await api.get('/items')
+    setItems(response.data)
+  }
+
+  console.log(items)
+
+  useEffect(() => {
+    loadItemsInApi()
+  }, [])
 
   return (
     <div id="page-create-point">
@@ -50,13 +70,13 @@ export function CreatePoint() {
             <h2>Endereço</h2>
             <span>Selecione o endereço no mapa</span>
           </legend>
-
           {/* Maps */}
+
+          {/* @ts-ignore erro na própria API - maneira sugerida na comunidade */}
           <MapContainer center={position} zoom={13}>
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
             <Marker position={position}></Marker>
           </MapContainer>
-
           {/* Formulário do estado e cidade */}
           <div className="field-group">
             <div className="field">
@@ -83,35 +103,12 @@ export function CreatePoint() {
           </legend>
 
           <ul className="items-grid">
-            <li>
-              <img src="http://localhost:3333/uploads/lampadas.svg" alt="" />
-              <span>Lampadas</span>
-            </li>
-
-            <li>
-              <img src="http://localhost:3333/uploads/lampadas.svg" alt="" />
-              <span>Lampadas</span>
-            </li>
-
-            <li className="selected">
-              <img src="http://localhost:3333/uploads/lampadas.svg" alt="" />
-              <span>Lampadas</span>
-            </li>
-
-            <li>
-              <img src="http://localhost:3333/uploads/lampadas.svg" alt="" />
-              <span>Lampadas</span>
-            </li>
-
-            <li>
-              <img src="http://localhost:3333/uploads/lampadas.svg" alt="" />
-              <span>Lampadas</span>
-            </li>
-
-            <li>
-              <img src="http://localhost:3333/uploads/lampadas.svg" alt="" />
-              <span>Lampadas</span>
-            </li>
+            {items.map((item) => (
+              <li key={item.id}>
+                <img src={item.image_url} alt={item.name} />
+                <span>{item.name}</span>
+              </li>
+            ))}
           </ul>
         </fieldset>
 
