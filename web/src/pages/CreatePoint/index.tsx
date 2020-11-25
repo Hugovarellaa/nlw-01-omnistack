@@ -1,7 +1,8 @@
 import axios from 'axios'
+import { LeafletMouseEvent } from 'leaflet'
 import { ChangeEvent, useEffect, useState } from 'react'
 import { FiArrowLeft } from 'react-icons/fi'
-import { MapContainer, Marker, TileLayer } from 'react-leaflet'
+import { Map, Marker, TileLayer } from 'react-leaflet'
 import { Link } from 'react-router-dom'
 import { Header } from '../../components/Header'
 import { api } from '../../libs/axios'
@@ -25,9 +26,13 @@ export function CreatePoint() {
   const [items, setItems] = useState<Items[]>([])
   const [ufs, setUfs] = useState<string[]>([])
   const [cities, setCities] = useState<string[]>([])
-  const [selectedUf, setSelectedUf] = useState('0')
 
-  const position = [-15.4568511, -47.6065576]
+  const [selectedUf, setSelectedUf] = useState('0')
+  const [selectedCities, setSelectedCities] = useState('0')
+
+  const [position, setPosition] = useState<[number, number]>([
+    -15.4568511, -47.6065576,
+  ])
 
   async function loadItemsInApi() {
     const response = await api.get('/items')
@@ -56,6 +61,15 @@ export function CreatePoint() {
   function handleSelectedUf(event: ChangeEvent<HTMLSelectElement>) {
     const uf = event.target.value
     setSelectedUf(uf)
+  }
+
+  function handleSelectedCity(event: ChangeEvent<HTMLSelectElement>) {
+    const city = event.target.value
+    setSelectedCities(city)
+  }
+
+  function handleMapClick(event: LeafletMouseEvent) {
+    setPosition([event.latlng.lat, event.latlng.lng])
   }
 
   useEffect(() => {
@@ -114,13 +128,13 @@ export function CreatePoint() {
             <h2>Endereço</h2>
             <span>Selecione o endereço no mapa</span>
           </legend>
-          {/* Maps */}
 
+          {/* Maps */}
           {/* @ts-ignore erro na própria API - maneira sugerida na comunidade */}
-          <MapContainer center={position} zoom={13}>
+          <Map center={position} onclick={handleMapClick}>
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-            <Marker position={position}></Marker>
-          </MapContainer>
+            <Marker position={position} />
+          </Map>
 
           {/* Formulário do estado e cidade */}
           <div className="field-group">
@@ -143,7 +157,12 @@ export function CreatePoint() {
 
             <div className="field">
               <label htmlFor="city">Cidade</label>
-              <select name="city" id="city">
+              <select
+                name="city"
+                id="city"
+                onChange={handleSelectedCity}
+                value={selectedCities}
+              >
                 <option value="0">Selecione uma Cidade</option>
                 {cities.map((city) => (
                   <option key={city} value={city}>

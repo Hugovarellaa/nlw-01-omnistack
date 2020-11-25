@@ -11,18 +11,18 @@
   },
   "dependencies": {
     "axios": "^1.4.0",
-    "leaflet": "^1.9.4",
+    "leaflet": "^1.6.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.9.0",
-    "react-leaflet": "^4.2.1",
+    "react-leaflet": "^2.7.0",
     "react-router-dom": "^6.11.2"
   },
   "devDependencies": {
     "@rocketseat/eslint-config": "^1.2.0",
+    "@types/react-leaflet": "^2.5.1",
     "@types/react": "^18.0.37",
     "@types/react-dom": "^18.0.11",
-    "@types/react-leaflet": "^3.0.0",
     "@typescript-eslint/eslint-plugin": "^5.59.0",
     "@typescript-eslint/parser": "^5.59.0",
     "@vitejs/plugin-react": "^4.0.0",
