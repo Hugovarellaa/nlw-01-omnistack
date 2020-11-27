@@ -1,9 +1,9 @@
 import axios from 'axios'
 import { LeafletMouseEvent } from 'leaflet'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { FiArrowLeft } from 'react-icons/fi'
 import { Map, Marker, TileLayer } from 'react-leaflet'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Header } from '../../components/Header'
 import { api } from '../../libs/axios'
 import './CreatePoint.css'
@@ -88,6 +88,7 @@ export function CreatePoint() {
     setPosition([event.latlng.lat, event.latlng.lng])
   }
 
+  // Form
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     event.preventDefault()
     const { name, value } = event.target
@@ -98,6 +99,7 @@ export function CreatePoint() {
     })
   }
 
+  // Function APi Items List
   function handleSelectedItem(id: number) {
     // Marca o item como Ativo, Caso ele ja esteja ativo ele desmarcar
 
@@ -108,6 +110,33 @@ export function CreatePoint() {
     } else {
       setSelectedItems((oldItem) => [...oldItem, id])
     }
+  }
+  const navigate = useNavigate()
+
+  async function handleSubmit(event: FormEvent) {
+    event.preventDefault()
+
+    const { name, email, whatsapp } = formData
+    const uf = selectedUf
+    const city = selectedCities
+    const [latitude, longitude] = position
+    const items = selectedItems
+
+    const data = {
+      name,
+      email,
+      whatsapp,
+      latitude,
+      longitude,
+      city,
+      uf,
+      items,
+    }
+
+    await api.post('/points', data)
+    alert('Ponto de coleta criado!!')
+
+    navigate('/')
   }
 
   // mapa
@@ -145,7 +174,7 @@ export function CreatePoint() {
         </Link>
       </header>
 
-      <form>
+      <form onSubmit={handleSubmit}>
         <h1>
           Cadastro do
           <br /> ponto de coleta
