@@ -5,6 +5,7 @@ import {
 } from '@expo-google-fonts/roboto'
 import { Ubuntu_700Bold } from '@expo-google-fonts/ubuntu'
 import { StatusBar, StyleSheet, View } from 'react-native'
+import { Loading } from './src/components/Loading'
 import { Home } from './src/pages/Home'
 
 export default function App() {
@@ -14,10 +15,6 @@ export default function App() {
     Ubuntu_700Bold,
   })
 
-  if (!fontsLoaded) {
-    return null
-  }
-
   return (
     <View style={styles.container}>
       <StatusBar
@@ -26,7 +23,7 @@ export default function App() {
         barStyle="dark-content"
       />
 
-      <Home />
+      {!fontsLoaded ? <Home /> : <Loading />}
     </View>
   )
 }
