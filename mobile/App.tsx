@@ -1,13 +1,34 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import {
+  Roboto_400Regular,
+  Roboto_500Medium,
+  useFonts,
+} from '@expo-google-fonts/roboto'
+import { Ubuntu_700Bold } from '@expo-google-fonts/ubuntu'
+import { StatusBar, StyleSheet, View } from 'react-native'
+import { Home } from './src/pages/Home'
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    Roboto_400Regular,
+    Roboto_500Medium,
+    Ubuntu_700Bold,
+  })
+
+  if (!fontsLoaded) {
+    return null
+  }
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="dark-content"
+      />
+
+      <Home />
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -17,4 +38,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-});
+})
