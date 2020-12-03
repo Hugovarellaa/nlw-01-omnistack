@@ -23,7 +23,7 @@ export default function App() {
         barStyle="dark-content"
       />
 
-      {!fontsLoaded ? <Home /> : <Loading />}
+      {fontsLoaded ? <Home /> : <Loading />}
     </View>
   )
 }
