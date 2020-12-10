@@ -1,10 +1,16 @@
-import { Text, View } from 'react-native'
+import { ImageBackground, Text } from 'react-native'
 import { styles } from './styles'
+
+import BackgroundPng from '../../assets/home-background.png'
 
 export function Home() {
   return (
-    <View style={styles.container}>
+    <ImageBackground
+      style={styles.container}
+      source={BackgroundPng}
+      imageStyle={{ width: 274, height: 368 }}
+    >
       <Text>Home</Text>
-    </View>
+    </ImageBackground>
   )
 }
