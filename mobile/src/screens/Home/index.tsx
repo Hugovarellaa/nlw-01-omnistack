@@ -1,12 +1,24 @@
 import Icon from '@expo/vector-icons/Feather'
-import { Image, ImageBackground, Text, View } from 'react-native'
-import { RectButton } from 'react-native-gesture-handler'
+import {
+  Image,
+  ImageBackground,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native'
 import { styles } from './styles'
 
+import { useNavigation } from '@react-navigation/native'
 import BackgroundPng from '../../assets/home-background.png'
 import LogoPng from '../../assets/logo.png'
 
 export function Home() {
+  const { navigate } = useNavigation()
+
+  function handleNextPage() {
+    navigate('detail')
+  }
+
   return (
     <ImageBackground
       style={styles.container}
@@ -22,12 +34,16 @@ export function Home() {
       </View>
 
       <View style={styles.footer}>
-        <RectButton style={styles.button} onPress={() => {}}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={handleNextPage}
+          activeOpacity={0.7}
+        >
           <View style={styles.buttonIcon}>
             <Icon name="arrow-right" size={24} color="#fff" />
           </View>
           <Text style={styles.buttonText}>Entrar</Text>
-        </RectButton>
+        </TouchableOpacity>
       </View>
     </ImageBackground>
   )
