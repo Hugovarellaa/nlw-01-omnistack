@@ -16,7 +16,7 @@ export function Home() {
   const { navigate } = useNavigation()
 
   function handleNextPage() {
-    navigate('detail')
+    navigate('points')
   }
 
   return (

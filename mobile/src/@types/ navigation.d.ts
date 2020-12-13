@@ -4,7 +4,7 @@ export declare global {
     interface RootParamList {
       home: undefined
       detail: undefined
-      point: undefined
+      points: undefined
     }
   }
 }
