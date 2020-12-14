@@ -1,20 +1,22 @@
 import { SimpleLineIcons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
+import { useEffect, useState } from 'react'
 import { Image, Text, TouchableOpacity, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import MapView, { Marker } from 'react-native-maps'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { SvgUri } from 'react-native-svg'
+import { api } from '../../libs/axios'
 import { styles } from './styles'
 
-// interface Item {
-//   id: string
-//   name: string
-//   image_url: string
-// }
+interface Item {
+  id: number
+  name: string
+  image_url: string
+}
 
 export function Points() {
-  // const [item, setItem] = useState<Item[]>([])
+  const [items, setItems] = useState<Item[]>([])
   const navigate = useNavigation()
 
   function goBack() {
@@ -25,15 +27,15 @@ export function Points() {
     navigate.navigate('detail')
   }
 
-  // async function getItemsAPI() {
-  //   const response = await api.get('/items')
+  async function getItemsAPI() {
+    const response = await api.get('/items')
 
-  //   setItem(response.data)
-  // }
+    setItems(response.data)
+  }
 
-  // useEffect(() => {
-  //   getItemsAPI()
-  // }, [])
+  useEffect(() => {
+    getItemsAPI()
+  }, [])
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -86,59 +88,16 @@ export function Points() {
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ paddingHorizontal: 24 }}
         >
-          <TouchableOpacity style={styles.item} onPress={() => {}}>
-            <SvgUri
-              width={42}
-              height={42}
-              uri="http://192.168.1.5:3333/uploads/oleo.svg"
-            />
-            <Text style={styles.itemTitle}>Óleo de Cozinha</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.item} onPress={() => {}}>
-            <SvgUri
-              width={42}
-              height={42}
-              uri="http://192.168.1.5:3333/uploads/oleo.svg"
-            />
-            <Text style={styles.itemTitle}>Óleo de Cozinha</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.item} onPress={() => {}}>
-            <SvgUri
-              width={42}
-              height={42}
-              uri="http://192.168.1.5:3333/uploads/oleo.svg"
-            />
-            <Text style={styles.itemTitle}>Óleo de Cozinha</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.item} onPress={() => {}}>
-            <SvgUri
-              width={42}
-              height={42}
-              uri="http://192.168.1.5:3333/uploads/oleo.svg"
-            />
-            <Text style={styles.itemTitle}>Óleo de Cozinha</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.item} onPress={() => {}}>
-            <SvgUri
-              width={42}
-              height={42}
-              uri="http://192.168.1.5:3333/uploads/oleo.svg"
-            />
-            <Text style={styles.itemTitle}>Óleo de Cozinha</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.item} onPress={() => {}}>
-            <SvgUri
-              width={42}
-              height={42}
-              uri="http://192.168.1.5:3333/uploads/oleo.svg"
-            />
-            <Text style={styles.itemTitle}>Óleo de Cozinha</Text>
-          </TouchableOpacity>
+          {items.map((item) => (
+            <TouchableOpacity
+              style={styles.item}
+              onPress={() => {}}
+              key={String(item.id)}
+            >
+              <SvgUri width={42} height={42} uri={item.image_url} />
+              <Text style={styles.itemTitle}>{item.name}</Text>
+            </TouchableOpacity>
+          ))}
         </ScrollView>
       </View>
     </SafeAreaView>
