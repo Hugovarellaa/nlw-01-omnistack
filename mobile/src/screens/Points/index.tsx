@@ -3,6 +3,7 @@ import { useNavigation } from '@react-navigation/native'
 import { Image, Text, TouchableOpacity, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import MapView, { Marker } from 'react-native-maps'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { SvgUri } from 'react-native-svg'
 import { styles } from './styles'
 
@@ -35,7 +36,7 @@ export function Points() {
   // }, [])
 
   return (
-    <>
+    <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
         <TouchableOpacity onPress={goBack}>
           <SimpleLineIcons name="logout" size={24} color="#34CB79" />
@@ -140,6 +141,6 @@ export function Points() {
           </TouchableOpacity>
         </ScrollView>
       </View>
-    </>
+    </SafeAreaView>
   )
 }

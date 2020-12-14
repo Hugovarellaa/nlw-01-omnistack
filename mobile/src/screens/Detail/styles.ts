@@ -23,11 +23,11 @@ export const styles = StyleSheet.create({
   },
 
   pointItems: {
-    fontFamily: 'Roboto_400Regular',
+    fontFamily: 'Roboto_500Medium',
     fontSize: 16,
     lineHeight: 24,
     marginTop: 8,
-    color: '#6C6C80',
+    color: '#34CB79',
   },
 
   address: {
