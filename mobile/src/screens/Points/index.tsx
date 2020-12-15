@@ -17,22 +17,36 @@ interface Item {
 
 export function Points() {
   const [items, setItems] = useState<Item[]>([])
+  const [selectedItems, setSelectedItems] = useState<number[]>([])
   const navigate = useNavigation()
 
+  // Move to the back Page
   function goBack() {
     navigate.goBack()
   }
 
+  // Move to the next Page
   function handleNavigateToDetail() {
     navigate.navigate('detail')
   }
-
+  // Get API Items
   async function getItemsAPI() {
     const response = await api.get('/items')
 
     setItems(response.data)
   }
 
+  function handleSelectedItem(id: number) {
+    const alreadySelected = selectedItems.findIndex((item) => item === id)
+    if (alreadySelected >= 0) {
+      const filteredItems = selectedItems.filter((item) => item !== id)
+      setSelectedItems(filteredItems)
+    } else {
+      setSelectedItems((oldItem) => [...oldItem, id])
+    }
+  }
+
+  // Get API Items
   useEffect(() => {
     getItemsAPI()
   }, [])
@@ -90,9 +104,13 @@ export function Points() {
         >
           {items.map((item) => (
             <TouchableOpacity
-              style={styles.item}
-              onPress={() => {}}
+              style={[
+                styles.item,
+                selectedItems.includes(item.id) ? styles.selectedItem : {},
+              ]}
+              onPress={() => handleSelectedItem(item.id)}
               key={String(item.id)}
+              activeOpacity={0.65}
             >
               <SvgUri width={42} height={42} uri={item.image_url} />
               <Text style={styles.itemTitle}>{item.name}</Text>
