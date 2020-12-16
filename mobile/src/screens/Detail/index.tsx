@@ -52,6 +52,7 @@ export function Detail() {
     })
   }
 
+  // Send Whatsapp application
   function handleWhatsapp() {
     Linking.openURL(
       `whatsapp://send?phone=${data.point.whatsapp}&text=Tenho interesse na coleta`,
