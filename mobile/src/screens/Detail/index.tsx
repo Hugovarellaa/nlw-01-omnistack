@@ -1,11 +1,15 @@
 import { Feather, FontAwesome } from '@expo/vector-icons'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import { Image, Text, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { styles } from './styles'
 
 export function Detail() {
   const navigate = useNavigation()
+  const router = useRoute()
+
+  const { params } = router
+  console.log(params)
 
   function goBack() {
     navigate.goBack()

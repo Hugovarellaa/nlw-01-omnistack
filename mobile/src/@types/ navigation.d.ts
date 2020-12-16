@@ -3,7 +3,9 @@ export declare global {
   namespace ReactNavigation {
     interface RootParamList {
       home: undefined
-      detail: undefined
+      detail: {
+        point_id: number
+      }
       points: undefined
     }
   }

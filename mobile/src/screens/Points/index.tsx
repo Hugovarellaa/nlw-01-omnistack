@@ -1,7 +1,8 @@
 import { SimpleLineIcons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
+import * as Location from 'expo-location'
 import { useEffect, useState } from 'react'
-import { Image, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, Image, Text, TouchableOpacity, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import MapView, { Marker } from 'react-native-maps'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -15,9 +16,21 @@ interface Item {
   image_url: string
 }
 
+interface Point {
+  id: number
+  name: string
+  image: string
+  latitude: number
+  longitude: number
+}
+
 export function Points() {
   const [items, setItems] = useState<Item[]>([])
   const [selectedItems, setSelectedItems] = useState<number[]>([])
+  const [points, setPoints] = useState<Point[]>([])
+
+  const [location, setLocation] = useState<[number, number]>([0, 0])
+
   const navigate = useNavigation()
 
   // Move to the back Page
@@ -26,8 +39,10 @@ export function Points() {
   }
 
   // Move to the next Page
-  function handleNavigateToDetail() {
-    navigate.navigate('detail')
+  function handleNavigateToDetail(id: number) {
+    navigate.navigate('detail', {
+      point_id: id,
+    })
   }
   // Get API Items
   async function getItemsAPI() {
@@ -46,13 +61,51 @@ export function Points() {
     }
   }
 
+  // Load Position in Maps
+  async function LoadPosition() {
+    const { status } = await Location.requestForegroundPermissionsAsync()
+
+    if (status !== 'granted') {
+      Alert.alert('Ops...', 'Permission to access location was denied')
+      return
+    }
+
+    const location = await Location.getCurrentPositionAsync()
+    const { latitude, longitude } = location.coords
+    console.log({ latitude, longitude })
+
+    setLocation([latitude, longitude])
+  }
+
+  async function getApiPoints() {
+    const response = await api.get('/points', {
+      params: {
+        city: 'planaltina',
+        uf: 'Goias',
+        items: [4],
+      },
+    })
+
+    setPoints(response.data)
+  }
+
   // Get API Items
   useEffect(() => {
     getItemsAPI()
   }, [])
 
+  // Load Position in Maps
+  useEffect(() => {
+    LoadPosition()
+  }, [])
+
+  useEffect(() => {
+    getApiPoints()
+  }, [])
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      {/* Map */}
       <View style={styles.container}>
         <TouchableOpacity onPress={goBack}>
           <SimpleLineIcons name="logout" size={24} color="#34CB79" />
@@ -61,41 +114,46 @@ export function Points() {
         <Text style={styles.description}>
           Encontre no mapa um ponto de coleta.
         </Text>
+
         <View style={styles.mapContainer}>
-          <MapView
-            style={styles.map}
-            initialRegion={{
-              latitude: -15.462304,
-              longitude: -47.6109705,
-              latitudeDelta: 0.014,
-              longitudeDelta: 0.014,
-            }}
-          >
-            <Marker
-              style={styles.mapMarker}
-              onPress={handleNavigateToDetail}
-              coordinate={{
-                latitude: -15.462304,
-                longitude: -47.6109705,
+          {location[0] !== 0 && (
+            <MapView
+              style={styles.map}
+              initialRegion={{
+                latitude: location[0],
+                longitude: location[1],
+                latitudeDelta: 0.014,
+                longitudeDelta: 0.014,
               }}
             >
-              <View style={styles.mapMarkerContainer}>
-                <Image
-                  style={styles.mapMarkerImage}
-                  source={{
-                    uri: 'https://plus.unsplash.com/premium_photo-1679728130451-ebba4dc5307d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=60',
+              {points.map((point) => (
+                <Marker
+                  style={styles.mapMarker}
+                  onPress={() => handleNavigateToDetail(point.id)}
+                  coordinate={{
+                    latitude: point.latitude,
+                    longitude: point.longitude,
                   }}
-                  alt=""
-                />
-                <Text style={styles.mapMarkerTitle}>Mercado</Text>
-              </View>
-            </Marker>
-          </MapView>
+                  key={point.id}
+                >
+                  <View style={styles.mapMarkerContainer}>
+                    <Image
+                      style={styles.mapMarkerImage}
+                      source={{
+                        uri: point.image,
+                      }}
+                      alt={point.name}
+                    />
+                    <Text style={styles.mapMarkerTitle}>{point.name}</Text>
+                  </View>
+                </Marker>
+              ))}
+            </MapView>
+          )}
         </View>
       </View>
 
-      {/* ,,13z */}
-
+      {/* Botoes Images */}
       <View style={styles.itemsContainer}>
         <ScrollView
           horizontal
