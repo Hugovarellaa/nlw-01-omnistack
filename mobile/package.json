@@ -25,7 +25,8 @@
     "react-native-screens": "~3.20.0",
     "react-native-svg": "13.4.0",
     "react-native-svg-transformer": "^1.0.0",
-    "expo-location": "~15.1.1"
+    "expo-location": "~15.1.1",
+    "expo-mail-composer": "~12.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
