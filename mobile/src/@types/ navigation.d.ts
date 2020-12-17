@@ -6,7 +6,10 @@ export declare global {
       detail: {
         point_id: number
       }
-      points: undefined
+      points: {
+        city: string
+        uf: string
+      }
     }
   }
 }

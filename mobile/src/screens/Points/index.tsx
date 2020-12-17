@@ -1,5 +1,5 @@
 import { SimpleLineIcons } from '@expo/vector-icons'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import * as Location from 'expo-location'
 import { useEffect, useState } from 'react'
 import { Alert, Image, Text, TouchableOpacity, View } from 'react-native'
@@ -24,6 +24,11 @@ interface Point {
   longitude: number
 }
 
+interface Params {
+  city: string
+  uf: string
+}
+
 export function Points() {
   const [items, setItems] = useState<Item[]>([])
   const [selectedItems, setSelectedItems] = useState<number[]>([])
@@ -32,6 +37,9 @@ export function Points() {
   const [location, setLocation] = useState<[number, number]>([0, 0])
 
   const navigate = useNavigation()
+
+  const router = useRoute()
+  const { city, uf } = router.params as Params
 
   // Move to the back Page
   function goBack() {
@@ -51,6 +59,7 @@ export function Points() {
     setItems(response.data)
   }
 
+  // Mark and Mark Off Items Selected
   function handleSelectedItem(id: number) {
     const alreadySelected = selectedItems.findIndex((item) => item === id)
     if (alreadySelected >= 0) {
@@ -80,11 +89,13 @@ export function Points() {
   async function getApiPoints() {
     const response = await api.get('/points', {
       params: {
-        city: 'planaltina',
-        uf: 'Goias',
-        items: [4],
+        city,
+        uf,
+        items: selectedItems,
       },
     })
+
+    console.log(response.data)
 
     setPoints(response.data)
   }
@@ -101,7 +112,7 @@ export function Points() {
 
   useEffect(() => {
     getApiPoints()
-  }, [])
+  }, [selectedItems])
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
