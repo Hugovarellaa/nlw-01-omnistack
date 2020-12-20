@@ -1,8 +1,8 @@
+import cors from 'cors'
 import express from 'express'
-import { pointsRoutes } from './routes/points.routes'
 import { resolve } from 'node:path'
 import { itemsRoutes } from './routes/items.routes'
-import cors from 'cors'
+import { pointsRoutes } from './routes/points.routes'
 
 export const app = express()
 

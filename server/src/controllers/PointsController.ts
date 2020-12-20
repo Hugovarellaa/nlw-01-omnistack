@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
-import { knex } from '../database'
 import { z } from 'zod'
+import { knex } from '../database'
 
 export class PointsController {
 	async create(request: Request, response: Response): Promise<Response> {
@@ -10,9 +10,9 @@ export class PointsController {
 			city: z.string(),
 			uf: z.string(),
 			whatsapp: z.string(),
-			latitude: z.number(),
-			longitude: z.number(),
-			items: z.number().array(),
+			latitude: z.coerce.number(),
+			longitude: z.coerce.number(),
+			items: z.string(),
 		})
 
 		const { name, email, city, uf, whatsapp, latitude, longitude, items } =
@@ -22,8 +22,7 @@ export class PointsController {
 
 		const points = await trx('points')
 			.insert({
-				image:
-					'https://plus.unsplash.com/premium_photo-1679728130451-ebba4dc5307d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=60',
+				image: request.file?.filename,
 				name,
 				email,
 				whatsapp,
@@ -36,10 +35,21 @@ export class PointsController {
 
 		const point_id = points[0].id
 
-		const pointItems = items.map((item_id: number) => {
+		const pointItems = items
+			.split(',')
+			.map((item: string) => Number(item.trim()))
+			.map((item_id: number) => {
+				return {
+					item_id,
+					point_id,
+				}
+			})
+
+		const serializedPoints = points.map((point) => {
 			return {
-				item_id,
-				point_id,
+				...points,
+				// image_url: `http://localhost:3333/uploads/${point.image}`,
+				image_url: `http://192.168.1.5:3333/uploads/${point.image}`,
 			}
 		})
 
@@ -47,7 +57,7 @@ export class PointsController {
 
 		await trx.commit()
 
-		return response.status(201).json(points)
+		return response.status(201).json({ points, serializedPoints })
 	}
 
 	async show(request: Request, response: Response): Promise<Response> {
@@ -62,6 +72,12 @@ export class PointsController {
 			return response.status(404).json({ error: 'points not found' })
 		}
 
+		const serializedPoint = {
+			...point,
+			// image_url: `http://localhost:3333/uploads/${point.image}`,
+			image_url: `http://192.168.1.5:3333/uploads/${point.image}`,
+		}
+
 		/*
       SELECT * FROM items
         JOIN point_items ON item.id = point_items.item_id
@@ -72,14 +88,14 @@ export class PointsController {
 			.where('point_items.point_id', id)
 			.select('name')
 
-		return response.json({ point, items })
+		return response.json({ point: serializedPoint, items })
 	}
 
 	async index(request: Request, response: Response): Promise<Response> {
 		const queryParamsSchema = z.object({
 			city: z.string(),
 			uf: z.string(),
-			items: z.string(),
+			items: z.coerce.string(),
 		})
 
 		const { city, items, uf } = queryParamsSchema.parse(request.query)

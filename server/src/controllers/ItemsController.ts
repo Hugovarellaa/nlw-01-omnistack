@@ -9,7 +9,8 @@ export class ItensController {
 			return {
 				id: item.id,
 				name: item.name,
-				image_url: `http://localhost:3333/uploads/${item.image}`,
+				// image_url: `http://localhost:3333/uploads/${item.image}`,
+				image_url: `http://192.168.1.5:3333/uploads/${item.image}`,
 			}
 		})
 
