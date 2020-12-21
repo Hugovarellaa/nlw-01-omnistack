@@ -4,6 +4,7 @@ import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { FiArrowLeft } from 'react-icons/fi'
 import { Map, Marker, TileLayer } from 'react-leaflet'
 import { Link, useNavigate } from 'react-router-dom'
+import { Dropzone } from '../../components/Dropzone'
 import { Header } from '../../components/Header'
 import { api } from '../../libs/axios'
 import './CreatePoint.css'
@@ -31,6 +32,8 @@ export function CreatePoint() {
 
   const [selectedUf, setSelectedUf] = useState('0')
   const [selectedCities, setSelectedCities] = useState('0')
+
+  const [selectedFile, setSelectedFile] = useState<File>()
 
   const [selectedItems, setSelectedItems] = useState<number[]>([])
 
@@ -122,16 +125,21 @@ export function CreatePoint() {
     const [latitude, longitude] = position
     const items = selectedItems
 
-    const data = {
-      name,
-      email,
-      whatsapp,
-      latitude,
-      longitude,
-      city,
-      uf,
-      items,
+    // Cadastrando na API com a opção Multipart form
+    const data = new FormData()
+    data.append('name', name)
+    data.append('email', email)
+    data.append('whatsapp', whatsapp)
+    data.append('latitude', String(latitude))
+    data.append('longitude', String(longitude))
+    data.append('city', city)
+    data.append('uf', uf)
+    data.append('items', items.join(','))
+
+    if (selectedFile) {
+      data.append('image', selectedFile)
     }
+    // \\ Cadastro na API
 
     await api.post('/points', data)
     alert('Ponto de coleta criado!!')
@@ -179,6 +187,8 @@ export function CreatePoint() {
           Cadastro do
           <br /> ponto de coleta
         </h1>
+
+        <Dropzone onFileUpload={setSelectedFile} />
 
         <fieldset>
           <legend>
