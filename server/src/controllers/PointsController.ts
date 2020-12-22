@@ -6,9 +6,9 @@ export class PointsController {
 	async create(request: Request, response: Response): Promise<Response> {
 		const createBodySchema = z.object({
 			name: z.string(),
-			email: z.string(),
+			email: z.string().email(),
 			city: z.string(),
-			uf: z.string(),
+			uf: z.string().max(2),
 			whatsapp: z.string(),
 			latitude: z.coerce.number(),
 			longitude: z.coerce.number(),
