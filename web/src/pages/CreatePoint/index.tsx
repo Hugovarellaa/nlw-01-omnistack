@@ -116,6 +116,7 @@ export function CreatePoint() {
   }
   const navigate = useNavigate()
 
+  // Register in Back-end
   async function handleSubmit(event: FormEvent) {
     event.preventDefault()
 
@@ -135,7 +136,6 @@ export function CreatePoint() {
     data.append('city', city)
     data.append('uf', uf)
     data.append('items', items.join(','))
-
     if (selectedFile) {
       data.append('image', selectedFile)
     }
