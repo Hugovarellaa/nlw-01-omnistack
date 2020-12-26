@@ -7,16 +7,19 @@ export const knexConfig: Knex.Config = {
 		// filename: ./src/database/app.db,
 		filename: resolve(__dirname, 'app.db'),
 	},
+
 	migrations: {
 		extension: 'ts',
 		// directory: ./src/database/migrations,
 		directory: resolve(__dirname, 'migrations'),
 	},
+
 	seeds: {
 		extension: 'ts',
 		// directory: ./src/database/seeds,
 		directory: resolve(__dirname, 'seeds'),
 	},
+
 	useNullAsDefault: true,
 }
 
